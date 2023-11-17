@@ -1,11 +1,7 @@
-import { Welcome } from '../components/Welcome/Welcome';
-import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
+const HomePage = () => {
+  console.log('home');
 
-export default function HomePage() {
-  return (
-    <>
-      <Welcome />
-      <ColorSchemeToggle />
-    </>
-  );
-}
+  return <></>;
+};
+
+export default HomePage;

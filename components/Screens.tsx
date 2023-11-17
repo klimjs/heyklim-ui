@@ -1,8 +1,18 @@
-import { ActionIcon, Group, SegmentedControl, Text } from '@mantine/core';
+import { ScreenType } from '@/types';
+import { ActionIcon, Group, Loader, SegmentedControl, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 export const Screens = () => {
-  console.log('screens');
+  const { isLoading: isScreensLoading, data: screens } = useQuery({
+    queryKey: ['screens'],
+    queryFn: () => axios(`${process.env.NEXT_PUBLIC_API_URL}/screens`).then((res) => res.data),
+  });
+
+  if (isScreensLoading) {
+    return <Loader size="sm" type="bars" />;
+  }
 
   return (
     <>
@@ -22,7 +32,7 @@ export const Screens = () => {
         fullWidth
         size="lg"
         radius="md"
-        data={['Page 23', 'Page 25', 'Page 26']}
+        data={screens.map((screen: ScreenType) => `Page ${screen.id}`)}
       />
     </>
   );

@@ -1,4 +1,5 @@
 import { Blocks } from '@/components/Blocks';
+import { CurrentScreen } from '@/components/CurrentScreen';
 import { Screens } from '@/components/Screens';
 import { Button, AppShell, Group, Text } from '@mantine/core';
 import { IconExternalLink } from '@tabler/icons-react';
@@ -30,7 +31,9 @@ const HomePage = () => {
       <AppShell.Navbar p="md">
         <Blocks />
       </AppShell.Navbar>
-      <AppShell.Main></AppShell.Main>
+      <AppShell.Main>
+        <CurrentScreen />
+      </AppShell.Main>
       <AppShell.Aside p="md">
         <Screens />
       </AppShell.Aside>

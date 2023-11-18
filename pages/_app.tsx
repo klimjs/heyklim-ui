@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
+import { Provider } from 'react-redux';
+import store from '@/redux/store';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
@@ -24,8 +26,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="shortcut icon" href="/favicon.svg" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Notifications />
-        <Component {...pageProps} />
+        <Provider store={store}>
+          <Notifications />
+          <Component {...pageProps} />
+        </Provider>
       </QueryClientProvider>
     </MantineProvider>
   );

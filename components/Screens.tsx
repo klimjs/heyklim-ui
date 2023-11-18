@@ -1,13 +1,25 @@
+import { setCurrentScreenId } from '@/redux/screen';
+import { RootState } from '@/redux/store';
 import { ScreenType } from '@/types';
 import { ActionIcon, Group, Loader, SegmentedControl, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const Screens = () => {
+  const { currentId } = useSelector((state: RootState) => state.screen);
+  const dispatch = useDispatch();
+
   const { isLoading: isScreensLoading, data: screens } = useQuery({
     queryKey: ['screens'],
-    queryFn: () => axios(`${process.env.NEXT_PUBLIC_API_URL}/screens`).then((res) => res.data),
+    queryFn: async () => {
+      const { data } = await axios(`${process.env.NEXT_PUBLIC_API_URL}/screens`);
+
+      dispatch(setCurrentScreenId(data[0].id));
+
+      return data;
+    },
   });
 
   if (isScreensLoading) {
@@ -32,7 +44,12 @@ export const Screens = () => {
         fullWidth
         size="lg"
         radius="md"
-        data={screens.map((screen: ScreenType) => `Page ${screen.id}`)}
+        value={`${currentId}`}
+        onChange={(v) => dispatch(setCurrentScreenId(v))}
+        data={screens.map((screen: ScreenType) => ({
+          value: screen.id,
+          label: `Page ${screen.id}`,
+        }))}
       />
     </>
   );

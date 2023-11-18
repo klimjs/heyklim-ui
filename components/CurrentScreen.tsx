@@ -1,14 +1,16 @@
+import { RootState } from '@/redux/store';
 import { ActionIcon, Group, Text } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
+import { useSelector } from 'react-redux';
 
 export const CurrentScreen = () => {
-  console.log('current');
+  const { currentId } = useSelector((state: RootState) => state.screen);
 
   return (
     <>
       <Group justify="space-between">
         <Text fw={700} size="sm" tt="uppercase">
-          Page 26
+          Page {currentId}
         </Text>
 
         <ActionIcon

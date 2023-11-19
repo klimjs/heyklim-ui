@@ -3,24 +3,31 @@ import { RootState } from '@/redux/store';
 import { ScreenType } from '@/types';
 import { ActionIcon, Group, Loader, SegmentedControl, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Screens = () => {
+  const queryClient = useQueryClient();
   const { currentId } = useSelector((state: RootState) => state.screen);
   const dispatch = useDispatch();
 
   const { isLoading: isScreensLoading, data: screens } = useQuery({
     queryKey: ['screens'],
-    queryFn: async () => {
-      const { data } = await axios(`${process.env.NEXT_PUBLIC_API_URL}/screens`);
-
-      dispatch(setCurrentScreenId(data[0].id));
-
-      return data;
-    },
+    queryFn: () => axios(`${process.env.NEXT_PUBLIC_API_URL}/screens`).then((res) => res.data),
   });
+
+  const { mutate: create, isPending: isCreating } = useMutation({
+    mutationFn: () => axios.post(`${process.env.NEXT_PUBLIC_API_URL}/screens`),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['screens'] }),
+  });
+
+  useEffect(() => {
+    if (!isScreensLoading && !currentId) {
+      dispatch(setCurrentScreenId(screens[0].id));
+    }
+  }, [isScreensLoading, screens]);
 
   if (isScreensLoading) {
     return <Loader size="sm" type="bars" />;
@@ -33,7 +40,13 @@ export const Screens = () => {
           Screens
         </Text>
 
-        <ActionIcon variant="outline" radius="xl" aria-label="Add screen" loading={false}>
+        <ActionIcon
+          onClick={() => create()}
+          variant="outline"
+          radius="xl"
+          aria-label="Add screen"
+          loading={isCreating}
+        >
           <IconPlus style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </ActionIcon>
       </Group>

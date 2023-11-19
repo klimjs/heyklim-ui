@@ -24,7 +24,7 @@ export const Screens = () => {
   });
 
   useEffect(() => {
-    if (!isScreensLoading && !currentId) {
+    if (!isScreensLoading && screens.length && !currentId) {
       dispatch(setCurrentScreenId(screens[0].id));
     }
   }, [isScreensLoading, screens]);
@@ -51,19 +51,21 @@ export const Screens = () => {
         </ActionIcon>
       </Group>
 
-      <SegmentedControl
-        orientation="vertical"
-        mt="md"
-        fullWidth
-        size="lg"
-        radius="md"
-        value={`${currentId}`}
-        onChange={(v) => dispatch(setCurrentScreenId(v))}
-        data={screens.map((screen: ScreenType) => ({
-          value: screen.id,
-          label: `Page ${screen.id}`,
-        }))}
-      />
+      {screens && (
+        <SegmentedControl
+          orientation="vertical"
+          mt="md"
+          fullWidth
+          size="lg"
+          radius="md"
+          value={`${currentId}`}
+          onChange={(v) => dispatch(setCurrentScreenId(v))}
+          data={screens.map((screen: ScreenType) => ({
+            value: screen.id,
+            label: `Page ${screen.id}`,
+          }))}
+        />
+      )}
     </>
   );
 };

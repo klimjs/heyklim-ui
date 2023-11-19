@@ -19,6 +19,8 @@ export const CurrentScreen = () => {
     },
   });
 
+  if (!currentId) return;
+
   return (
     <>
       <Group justify="space-between">

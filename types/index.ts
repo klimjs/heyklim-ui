@@ -8,3 +8,13 @@ export type BlockType = {
   type: string;
   color: string;
 };
+
+export type ActionType = {
+  id: number;
+  block?: {
+    id: number;
+    type: string;
+    color: string;
+  };
+  targetId?: number;
+};

@@ -1,16 +1,29 @@
+import { RootState } from '@/redux/store';
 import { BlockType } from '@/types';
 import { Button, Center, Group, Loader, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
 import { IconArrowRight, IconBeach, IconBike, IconBone } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export const Blocks = () => {
+  const queryClient = useQueryClient();
+  const { currentId } = useSelector((state: RootState) => state.screen);
   const [active, setActive] = useState<number | null>(null);
 
   const { isLoading: isBlocksLoading, data: blocks } = useQuery({
     queryKey: ['blocks'],
     queryFn: () => axios(`${process.env.NEXT_PUBLIC_API_URL}/blocks`).then((res) => res.data),
+  });
+
+  const { mutate: add, isPending: isAdding } = useMutation({
+    mutationFn: () =>
+      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/actions`, {
+        screenId: currentId,
+        blockId: active,
+      }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['actions'] }),
   });
 
   if (isBlocksLoading) {
@@ -24,7 +37,13 @@ export const Blocks = () => {
           Blocks
         </Text>
 
-        <Button disabled={!active} variant="subtle" rightSection={<IconArrowRight size={14} />}>
+        <Button
+          onClick={() => add()}
+          disabled={!active}
+          loading={isAdding}
+          variant="subtle"
+          rightSection={<IconArrowRight size={14} />}
+        >
           Add block to screen
         </Button>
       </Group>

@@ -23,6 +23,7 @@ export const Screens = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['screens'] }),
   });
 
+  // set the first screen as current if currentId is null (first page load and screen delete)
   useEffect(() => {
     if (!isScreensLoading && screens.length && !currentId) {
       dispatch(setCurrentScreenId(screens[0].id));
@@ -35,7 +36,7 @@ export const Screens = () => {
 
   return (
     <>
-      <Group justify="space-between">
+      <Group justify="space-between" mb="md">
         <Text fw={500} size="sm" tt="uppercase">
           Screens
         </Text>
@@ -55,7 +56,6 @@ export const Screens = () => {
         {screens && (
           <SegmentedControl
             orientation="vertical"
-            mt="md"
             fullWidth
             size="lg"
             radius="md"

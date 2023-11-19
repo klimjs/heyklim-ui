@@ -1,7 +1,7 @@
 import { setCurrentScreenId } from '@/redux/screen';
 import { RootState } from '@/redux/store';
 import { ScreenType } from '@/types';
-import { ActionIcon, Group, Loader, SegmentedControl, Text } from '@mantine/core';
+import { ActionIcon, Group, Loader, ScrollArea, SegmentedControl, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -51,21 +51,23 @@ export const Screens = () => {
         </ActionIcon>
       </Group>
 
-      {screens && (
-        <SegmentedControl
-          orientation="vertical"
-          mt="md"
-          fullWidth
-          size="lg"
-          radius="md"
-          value={`${currentId}`}
-          onChange={(v) => dispatch(setCurrentScreenId(v))}
-          data={screens.map((screen: ScreenType) => ({
-            value: screen.id,
-            label: `Page ${screen.id}`,
-          }))}
-        />
-      )}
+      <ScrollArea type="never">
+        {screens && (
+          <SegmentedControl
+            orientation="vertical"
+            mt="md"
+            fullWidth
+            size="lg"
+            radius="md"
+            value={`${currentId}`}
+            onChange={(v) => dispatch(setCurrentScreenId(v))}
+            data={screens.map((screen: ScreenType) => ({
+              value: screen.id,
+              label: `Page ${screen.id}`,
+            }))}
+          />
+        )}
+      </ScrollArea>
     </>
   );
 };

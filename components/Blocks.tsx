@@ -9,7 +9,7 @@ export const Blocks = () => {
   const [active, setActive] = useState<number | null>(null);
 
   const { isLoading: isBlocksLoading, data: blocks } = useQuery({
-    queryKey: ['screens'],
+    queryKey: ['blocks'],
     queryFn: () => axios(`${process.env.NEXT_PUBLIC_API_URL}/blocks`).then((res) => res.data),
   });
 

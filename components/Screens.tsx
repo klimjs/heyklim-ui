@@ -20,7 +20,10 @@ export const Screens = () => {
 
   const { mutate: create, isPending: isCreating } = useMutation({
     mutationFn: () => axios.post(`${process.env.NEXT_PUBLIC_API_URL}/screens`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['screens'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['screens'] });
+      queryClient.invalidateQueries({ queryKey: ['screens-select'] });
+    },
   });
 
   // set the first screen as current if currentId is null (first page load and screen delete)

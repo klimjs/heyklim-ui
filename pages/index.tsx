@@ -10,7 +10,7 @@ const HomePage = () => {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 300, breakpoint: 'sm', collapsed: { desktop: false, mobile: true } }}
+      navbar={{ width: 320, breakpoint: 'sm', collapsed: { desktop: false, mobile: true } }}
       aside={{ width: 300, breakpoint: 'sm', collapsed: { desktop: false, mobile: true } }}
       padding="md"
     >
